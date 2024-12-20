@@ -1,21 +1,27 @@
 document.getElementById("fetch-button").addEventListener("click", fetchImage);
 
 function fetchImage() {
-    const baseImageUrl = "https://random.dog/4436608b-f463-48b4-8026-8f29f036195b.jpg";
+    const apiUrl = "https://random.dog/woof.json";
 
-    const imageUrl = `${baseImageUrl}?t=${new Date().getTime()}`;
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const imageUrl = data.url; 
+            const imageContainer = document.getElementById("image-container");
 
-    const imageContainer = document.getElementById("image-container");
+            imageContainer.innerHTML = ""; 
 
-    imageContainer.innerHTML = "";
+            const img = document.createElement("img");
+            img.src = imageUrl;
+            img.alt = "Random Dog Image";
+            img.style.maxWidth = "100%";
+            img.style.maxHeight = "400px";
+            img.style.width = "auto";
+            img.style.height = "auto";
 
-    const img = document.createElement("img");
-    img.src = imageUrl;
-    img.alt = "Random Dog Image";
-    img.style.maxWidth = "100%";   
-    img.style.maxHeight = "400px"; 
-    img.style.width = "auto";    
-    img.style.height = "auto";   
-
-    imageContainer.appendChild(img);
+            imageContainer.appendChild(img);
+        })
+        .catch(error => {
+            console.error("Error fetching random dog image:", error);
+        });
 }
